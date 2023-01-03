@@ -15,6 +15,6 @@ This app is an advance voice recorder, that can run in the background.
 ## Authors
 
 - Oleksander Deviatkin
-- Adrian Korostek
+- Adrian Rostek
 - Piotr Majewski
 - Paweł Majewski
