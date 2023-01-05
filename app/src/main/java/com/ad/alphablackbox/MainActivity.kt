@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.ad.alphablackbox.logic.Permissions
-import com.ad.alphablackbox.logic.recorder.Recorder
+import com.ad.alphablackbox.logic.recorder.RecordingManager
 
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     private var saveLastRecordingsButton: Button? = null
     private var stopRecordingButton: Button? = null
 
-    private val recorder = Recorder(
+    private val recordingManager = RecordingManager(
         recordingAction = ::changeButtonsToRecording,
         idleAction = ::changeButtonsToStop
     )
@@ -29,17 +29,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startRecording() {
-        recorder.startRecording()
+        recordingManager.startRecording()
         changeButtonsToRecording()
     }
 
     fun stopRecording() {
-        recorder.stopRecording()
+        recordingManager.stopRecording()
         changeButtonsToStop()
     }
 
     fun saveLastRecordings() {
-        recorder.savePermanentRecord()
+        recordingManager.savePermanentRecord()
     }
 
     private fun initButtons() {
@@ -64,9 +64,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun connectToRecorderService(){
-        val recorderIntent = Intent(this@MainActivity, recorder.ServiceClass)
-        bindService(recorderIntent, recorder.Connection, BIND_AUTO_CREATE)
-        if (!recorder.serviceExists()) {
+        val recorderIntent = Intent(this@MainActivity, recordingManager.ServiceClass)
+        bindService(recorderIntent, recordingManager.Connection, BIND_AUTO_CREATE)
+        if (!recordingManager.serviceExists()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(recorderIntent)
             } else {
