@@ -1,15 +1,17 @@
 package com.ad.alphablackbox.logic.recorder
 
 import android.content.ServiceConnection
+import com.ad.alphablackbox.logic.service.RecorderService
+import com.ad.alphablackbox.logic.service.RecorderServiceConnection
 
 
-class RecordingManager (recordingAction: () -> Any, idleAction: () -> Any) {
+class RecordingManager () {
     val ServiceClass get() = RecorderService::class.java
     val Connection get(): ServiceConnection = connection
     val temporaryRecordList: MutableList<String> = ArrayList()
 
     private val service = RecorderService()
-    private val connection = RecorderServiceConnection(recordingAction, idleAction)
+    private val connection = RecorderServiceConnection()
 
     fun startRecording() {
 
@@ -27,7 +29,4 @@ class RecordingManager (recordingAction: () -> Any, idleAction: () -> Any) {
 
     }
 
-    fun serviceExists(): Boolean{
-        return service.isInstanceCreated()
-    }
 }
