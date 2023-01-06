@@ -1,4 +1,5 @@
 # Alpha Black Box 
+
 This is open-source project designed by students for people who prefer to be better prepared for unforeseen incident. 
 
 ## Description
@@ -17,7 +18,6 @@ The main idea behind the app is to create something, that can provide you by evi
   - [ ] File explorer/player
   - [ ] Settings
   - [ ] Additional features
-
 
 ## Authors
 

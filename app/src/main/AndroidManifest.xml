@@ -21,11 +21,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AlphaBlackBox"
+        android:theme="@style/Theme.Material3.Dark.NoActionBar"
         tools:targetApi="31">
 
         <service
-            android:name=".BackgroundMediaService"
+            android:name=".logic.service.RecorderService"
             android:foregroundServiceType="microphone" />
 
         <activity
