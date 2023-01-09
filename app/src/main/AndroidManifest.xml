@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.ad.alphablackbox">
-
-    <!-- General authority -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Speech recognition permission -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -12,6 +8,8 @@
 
     <!-- Service permission -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+
 
     <application
         android:allowBackup="true"
@@ -23,9 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Material3.Dark.NoActionBar"
         tools:targetApi="31">
-
+        <uses-library android:required="false" android:name="com.ad.alphablackbox"> </uses-library>
         <service
-            android:name=".logic.service.RecorderService"
+            android:name=".logic.background.Service"
             android:foregroundServiceType="microphone" />
 
         <activity

@@ -1,4 +1,4 @@
-package com.ad.alphablackbox.logic.service
+package com.ad.alphablackbox.logic.background
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -13,7 +13,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.ad.alphablackbox.R
 
-class RecorderService : Service() {
+class Service : Service() {
     private val binder: IBinder = LocalBinder()
     private val notificationId = 1
     private val notificationChannelId = "my_channel_id"
@@ -22,8 +22,8 @@ class RecorderService : Service() {
     private val notificationContentText = "App is running in background and record sound 24/7"
 
     inner class LocalBinder : Binder() {
-        fun getService(): RecorderService {
-            return this@RecorderService
+        fun getService(): Service {
+            return this@Service
         }
     }
 
@@ -45,6 +45,14 @@ class RecorderService : Service() {
         createNotificationChannel()
         val notification = createNotification()
         startForeground(notificationId, notification)
+
+        //val test = Recorder(this, this.externalCacheDir?.path!!)
+        //Log.d("Service", "start")
+        //test.startRecording()
+        //Thread.sleep(1000*60*2)
+        //test.stopRecording()
+        //Log.d("Service", "end")
+
         return super.onStartCommand(intent, flags, startId)
     }
     private fun createNotificationChannel() {

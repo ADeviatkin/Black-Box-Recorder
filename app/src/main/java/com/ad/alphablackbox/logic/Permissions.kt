@@ -6,11 +6,11 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.ad.alphablackbox.MainActivity
 
 class Permissions {
     companion object{
-        fun ensurePermissions(mainActivity: MainActivity, applicationContext: Context) {
+
+        fun ensurePermissions(mainActivity: AppCompatActivity, applicationContext: Context) {
             if (!Permissions.allAllowed(applicationContext)){
                 Permissions.requestAll(mainActivity)
             }
