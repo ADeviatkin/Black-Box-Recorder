@@ -28,19 +28,22 @@
                 android:id="@+id/button_main_view"
                 android:onClick="onClick"
                 android:text="Recording"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:background="@color/purple_200" />
             <!-- Records view -->
             <Button
                 android:id="@+id/button_records_view"
                 android:onClick="onClick"
                 android:text="Record list"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:background="@color/purple_200" />
             <!-- Settings view -->
             <Button
                 android:id="@+id/button_settings_view"
                 android:onClick="onClick"
                 android:text="Settings"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:background="@color/purple_200"/>
         </TableRow>
 
         <!-- Nav indicator bar -->
