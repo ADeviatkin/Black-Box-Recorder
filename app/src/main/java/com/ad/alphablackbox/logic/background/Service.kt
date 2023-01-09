@@ -12,6 +12,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.ad.alphablackbox.R
+import com.ad.alphablackbox.logic.recorder.Recorder
 
 class Service : Service() {
     private val binder: IBinder = LocalBinder()
@@ -49,7 +50,7 @@ class Service : Service() {
         //val test = Recorder(this, this.externalCacheDir?.path!!)
         //Log.d("Service", "start")
         //test.startRecording()
-        //Thread.sleep(1000*60*2)
+        //Thread.sleep(1000*60*10)
         //test.stopRecording()
         //Log.d("Service", "end")
 

@@ -62,7 +62,7 @@ class Recorder {
 
         //encrypt audio
         encryptingThread = thread(true) {
-            while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0) {
+            while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0|| !WAVStack.isEmpty()) {
                 if (!WAVStack.isEmpty()) {
                     encryptedWAVStack.addLast(this.cipherAES!!.encrypt(WAVStack.removeLast()))
                 }
@@ -71,9 +71,9 @@ class Recorder {
 
         //writes encrypted audio to file
         writingThread = thread(true) {
-            while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0 || !WAVStack.isEmpty()) {
-                if (!WAVStack.isEmpty()) {
-                    writeData(WAVStack.removeFirst(), this.path!!)
+            while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0 || !encryptedWAVStack.isEmpty()) {
+                if (!encryptedWAVStack.isEmpty()) {
+                    writeData(encryptedWAVStack.removeFirst(), this.path!!)
                     RecordingVariables.inDeque -= 1
                 }
             }
