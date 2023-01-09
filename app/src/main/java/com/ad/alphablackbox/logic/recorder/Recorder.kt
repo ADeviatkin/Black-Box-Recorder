@@ -4,15 +4,21 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import com.ad.alphablackbox.logic.cryptography.KeyGenerator.Companion.generateAESKeys
+import com.ad.alphablackbox.logic.cryptography.KeyGenerator.Companion.generateIv
+import com.ad.alphablackbox.logic.cryptography.UCipher
 import com.ad.alphablackbox.logic.FileExplorer.Companion.writeData
 import com.ad.alphablackbox.logic.recorder.HeaderConstructor.Companion.addHeaderToPCM
+import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.BITS_PER_SAMPLE
 import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.PCMStack
 import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.WAVStack
+import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.encryptedWAVStack
 import kotlin.concurrent.thread
 
 
 class Recorder {
-    //var cipherAES: UCipher? = null
+
+    var cipherAES: UCipher? = null
     private var recorder: AudioRecord? = null
     private val path: String
     private var recordingThread: Thread? = null
@@ -29,7 +35,7 @@ class Recorder {
     @SuppressLint("MissingPermission")
     fun startRecording() {
         // create Cipher with AES encrypting
-        //this.cipherAES = UCipher("AES")
+        this.cipherAES = UCipher("AES", BITS_PER_SAMPLE)
 
         recorder = AudioRecord(
                 MediaRecorder.AudioSource.MIC,
@@ -54,7 +60,6 @@ class Recorder {
             }
         }
 
-        """-
         //encrypt audio
         encryptingThread = thread(true) {
             while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0) {
@@ -63,7 +68,6 @@ class Recorder {
                 }
             }
         }
-        """
 
         //writes encrypted audio to file
         writingThread = thread(true) {

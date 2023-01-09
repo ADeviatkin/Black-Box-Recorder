@@ -1,4 +1,4 @@
-package com.ad.alphablackbox.cryptography;
+package com.ad.alphablackbox.logic.cryptography;
 
 import java.security.Key
 import java.security.KeyPair

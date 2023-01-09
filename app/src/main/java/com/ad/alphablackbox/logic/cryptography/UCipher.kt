@@ -1,16 +1,21 @@
-package com.ad.alphablackbox.cryptography;
+package com.ad.alphablackbox.logic.cryptography;
 import android.util.Log
-import com.ad.alphablackbox.cryptography.KeyGenerator.Companion.generateIv
+import com.ad.alphablackbox.logic.cryptography.KeyGenerator.Companion.generateAESKeys
+import com.ad.alphablackbox.logic.cryptography.KeyGenerator.Companion.generateIv
 import java.security.Key
 import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
 
 class UCipher {
+    private lateinit var key: Key
+    private lateinit var iVector: IvParameterSpec
     private lateinit var cipherEncryptor: Cipher
     private lateinit var cipherDecryptor: Cipher
 
-    constructor(transformation: String, key: Key?, BITS_PER_SAMPLE: Short) {
+    constructor(transformation: String, BITS_PER_SAMPLE: Short) {
         try {
-            val iVector = generateIv(BITS_PER_SAMPLE)
+            this.key = generateAESKeys()!!
+            this.iVector = generateIv(BITS_PER_SAMPLE)
             this.cipherEncryptor = Cipher.getInstance(transformation)
             this.cipherDecryptor = Cipher.getInstance(transformation)
             this.cipherEncryptor.init(Cipher.ENCRYPT_MODE, key, iVector)
