@@ -15,8 +15,10 @@ The main idea behind the app is to create something, that can provide you by evi
   - [x] General
   - [ ] Background service
 - [ ] GUI
-  - [ ] File explorer/player
-  - [ ] Settings
+  - [x] Navigation bar
+  - [ ] Recording view
+  - [ ] File explorer/player view
+  - [ ] Settings view
   - [ ] Additional features
 
 ## Authors
