@@ -1,39 +1,34 @@
 package com.ad.alphablackbox.logic.player
 
-import android.app.Activity
-import android.media.AudioManager
+import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Bundle
 import java.io.File
 
-class Player : Activity() {
+class Player {
 
     private var mp :MediaPlayer? = null
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        volumeControlStream = AudioManager.STREAM_MUSIC
-    }
-
-    fun Play(file :File) {
+    fun play(file :File,context:Context) {
         val path = Uri.parse(file.path)
         if (mp != null) {
             mp!!.release()
         }
-        mp = MediaPlayer.create(this,path)
+        mp = MediaPlayer()
+        mp?.setDataSource(context,path)
+        mp?.prepare()
         mp?.start()
     }
 
-    fun Pause(){
+    fun pause(){
         mp?.pause()
     }
 
-    fun Resume(){
+    fun resume(){
         mp?.start()
     }
 
-    fun Isplaying():Boolean{
+    fun isPlaying():Boolean{
         val b = mp?.isPlaying
         if(b!=null) {return b}
         else {return false}

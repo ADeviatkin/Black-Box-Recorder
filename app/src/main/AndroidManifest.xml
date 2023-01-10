@@ -4,7 +4,8 @@
     package="com.ad.alphablackbox">
 
     <!-- General authority -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
     <!-- Speech recognition permission -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -12,6 +13,9 @@
 
     <!-- Service permission -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <!-- Audio player require permission -->
+    <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
 
     <application
         android:allowBackup="true"
