@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+    </androidx.appcompat.widget.Toolbar>
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        android:stretchColumns="0,1,2">
+
+        <!-- Nav buttons -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Main view -->
+            <Button
+                android:id="@+id/button_main_view"
+                android:onClick="onClick"
+                android:text="Recording"
+                android:textColor="@color/black"
+                android:background="@color/purple_200" />
+            <!-- Records view -->
+            <Button
+                android:id="@+id/button_records_view"
+                android:onClick="onClick"
+                android:text="Record list"
+                android:textColor="@color/black"
+                android:background="@color/purple_200" />
+            <!-- Settings view -->
+            <Button
+                android:id="@+id/button_settings_view"
+                android:onClick="onClick"
+                android:text="Settings"
+                android:textColor="@color/black"
+                android:background="@color/purple_200"/>
+        </TableRow>
+
+        <!-- Nav indicator bar -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Main view -->
+            <TextView
+                android:id="@+id/navigation_bar_indicator_1"
+                android:background="@color/purple_200" />
+            <!-- Records view -->
+            <TextView
+                android:id="@+id/navigation_bar_indicator_2"
+                android:background="@color/purple_200" />
+            <!-- Settings view -->
+            <TextView
+                android:id="@+id/navigation_bar_indicator_3"
+                android:background="@color/purple_200" />
+        </TableRow>
+
+    </TableLayout>
+
+</merge>

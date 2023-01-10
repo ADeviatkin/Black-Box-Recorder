@@ -4,7 +4,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.ad.alphablackbox.presentation.NavigationBar;
+import com.ad.alphablackbox.presentation.NavigationManager;
 
 public class SwipeListener implements View.OnTouchListener
 {
@@ -13,7 +13,7 @@ public class SwipeListener implements View.OnTouchListener
     int velocity_treshold = 100;
 
     // Constructor
-    public SwipeListener(View view, NavigationBar navigation)
+    public SwipeListener(View view, NavigationManager navigation)
     {
         GestureDetector.SimpleOnGestureListener listener = new GestureDetector.SimpleOnGestureListener()
         {
