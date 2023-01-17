@@ -77,7 +77,8 @@ class OnClickManager (del : MainActivity)
         // Function begins recording (starts the background service)
 
         Log.d("App", "Try to connect")
-        ServiceBridge.connectToService(activity.applicationContext)
+        activity.bridgeToRecorderService = ServiceBridge(activity.applicationContext)
+        activity.bridgeToRecorderService.connect()
 
         getView<ImageButton>(R.id.button_start_recording)?.isEnabled = false
         getView<Button>(R.id.button_stop_recording)?.isEnabled = true

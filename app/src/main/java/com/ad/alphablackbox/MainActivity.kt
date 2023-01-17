@@ -13,7 +13,7 @@ import com.ad.alphablackbox.logic.player.Player
 class MainActivity : AppCompatActivity()
 {
     private lateinit var onclickmanager : OnClickManager
-	private lateinit var bridgeToRecorderService: ServiceBridge
+    lateinit var bridgeToRecorderService: ServiceBridge
     lateinit var swipelistener :SwipeListener
     val player=Player()
 
@@ -21,8 +21,6 @@ class MainActivity : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         ensurePermissions(this, applicationContext)
-        bridgeToRecorderService = ServiceBridge(applicationContext)
-        bridgeToRecorderService.connect()
 		initiate()
     }
 
