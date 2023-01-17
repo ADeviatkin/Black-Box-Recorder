@@ -36,7 +36,7 @@ class OnClickManager (del : MainActivity)
             R.id.button_start_recording -> startRecording()
             R.id.button_stop_recording -> stopRecording()
             R.id.button_pause -> pause()
-            R.id.item -> play(sender as Button)
+            R.id.item -> play(sender as Button) //?
             else -> Log.d("App", "Error occurred in OnClickManager -> Unknown button was clicked (View index out of range, View index = "+sender.id.toString()+")")
         }
     }

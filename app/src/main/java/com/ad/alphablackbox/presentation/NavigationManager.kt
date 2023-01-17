@@ -1,7 +1,6 @@
 package com.ad.alphablackbox.presentation
 
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -29,7 +28,7 @@ class NavigationManager(del : MainActivity)
         var flv :ListView = activity.findViewById(R.id.filelist)
 
         // Adapter parms
-        var adapter = ArrayAdapter<String>(activity, R.layout.list_view_module, R.id.custom_id2 , filelist)
+        val adapter = ArrayAdapter<String>(activity, R.layout.list_view_module, R.id.item , filelist)
         flv.adapter = adapter
     }
     // public
