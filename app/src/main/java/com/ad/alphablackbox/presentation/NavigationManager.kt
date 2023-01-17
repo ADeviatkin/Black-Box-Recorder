@@ -1,13 +1,11 @@
 package com.ad.alphablackbox.presentation
 
-import android.annotation.SuppressLint
 import android.graphics.Color
-import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.SeekBar
 import com.ad.alphablackbox.MainActivity
 import com.ad.alphablackbox.R
 import com.ad.alphablackbox.logic.load.FilesLoader
@@ -15,7 +13,8 @@ import com.ad.alphablackbox.logic.load.FilesLoader
 class NavigationManager(del : MainActivity)
 {
     private var currentView :Int = 0;
-    private val delegate :MainActivity = del
+    private val activity :MainActivity = del
+    private var seek:SeekBar?=null
 
     private val layoutIds :IntArray = intArrayOf(R.layout.main_layout, R.layout.records_layout, R.layout.settings_layout)
     private val viewIds :IntArray = intArrayOf(R.id.main_layout, R.id.records_layout, R.id.settings_layout)
@@ -27,23 +26,41 @@ class NavigationManager(del : MainActivity)
         val loader = FilesLoader()
         val filelist = loader.getFileNames("/data/data/com.ad.alphablackbox/files/Download")
         //file list view
-        var flv :ListView = delegate.findViewById(R.id.filelist)
+        var flv :ListView = activity.findViewById(R.id.filelist)
 
         // Adapter parms
-        var adapter = ArrayAdapter<String>(delegate, R.layout.list_view_module, R.id.custom_id2 , filelist)
+        var adapter = ArrayAdapter<String>(activity, R.layout.list_view_module, R.id.custom_id2 , filelist)
         flv.adapter = adapter
     }
     // public
     fun setView(c :Int)
     {
-        delegate.setContentView(layoutIds[c])
+        activity.setContentView(layoutIds[c])
         // listener
-        delegate.findViewById<View>(viewIds[c]).setOnTouchListener(delegate.swipelistener)
+        activity.findViewById<View>(viewIds[c]).setOnTouchListener(activity.swipelistener)
         // setting new color
-        delegate.findViewById<View>(navBarIds[c]).setBackgroundColor(Color.WHITE)
+        activity.findViewById<View>(navBarIds[c]).setBackgroundColor(Color.WHITE)
 
         if (viewIds[c] == R.id.records_layout)
         {
+            if(seek == null){
+                seek = activity.findViewById<SeekBar>(R.id.seekBar)
+                seek?.setOnSeekBarChangeListener(object :
+                    SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean){
+                        activity.player.setPosition((progress*activity.player.getDuration()/100).toInt())
+                    }
+
+                    override fun onStartTrackingTouch(seek: SeekBar){
+                        // write custom code for progress is started
+                    }
+
+                    override fun onStopTrackingTouch(seek: SeekBar){
+                        // write custom code for progress is stopped
+                    }
+                })
+            }
+
             showFileList()
         }
         currentView = c

@@ -13,11 +13,13 @@ import com.ad.alphablackbox.logic.load.FilesLoader
 import android.os.Environment
 import android.util.Log
 
+import android.widget.SeekBar
+
 class MainActivity : AppCompatActivity()
 {
     private lateinit var onclickmanager : OnClickManager
     lateinit var swipelistener :SwipeListener
-    var player = Player()
+    val player=Player()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -32,10 +34,20 @@ class MainActivity : AppCompatActivity()
         swipelistener = SwipeListener(findViewById(R.id.main_layout), onclickmanager.navigation())
         onclickmanager.setView(0)
 
-        Log.d("App", externalCacheDir?.path.toString())
-        var loader = FilesLoader()
-        var list1 = loader.getAllFiles(externalCacheDir?.path.toString())
-        Log.d("App", list1.toString())
+        Log.d("App", "Media player created")
+
+
+        val path = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        if(path == null){
+            Log.d("App", "Can not access to Environment.DIRECTORY_DOWNLOADS")
+        }
+        else{
+            Log.d("App", "Path $path")
+            val fl = FilesLoader()
+            val files = fl.getAllFiles(path)
+            Log.d("App", "song 1")
+            player.play(files[1],applicationContext)
+            }
     }
     fun onClick(button :View)
     {

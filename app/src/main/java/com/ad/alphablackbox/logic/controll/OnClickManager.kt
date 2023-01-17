@@ -35,6 +35,7 @@ class OnClickManager (del : MainActivity)
             // buttons main view
             R.id.button_start_recording -> startRecording()
             R.id.button_stop_recording -> stopRecording()
+            R.id.button_pause -> pause()
             R.id.item -> play(sender as Button)
             else -> Log.d("App", "Error occurred in OnClickManager -> Unknown button was clicked (View index out of range, View index = "+sender.id.toString()+")")
         }
@@ -58,6 +59,19 @@ class OnClickManager (del : MainActivity)
         }
         return null
     }
+
+    private fun pause() {
+        val view = getView<Button>(R.id.button_pause)
+        if(activity.player.isPlaying()){
+            view?.setText("Resume")
+            activity.player.pause()
+        }
+        else{
+            view?.setText("Pause")
+            activity.player.unpause()
+        }
+    }
+
     private fun startRecording()
     {
         // Function begins recording (starts the background service)

@@ -64,5 +64,9 @@ class Player : Thread(){
             return -1
         }
     }
+
+    fun getDuration():Int{
+        return mp!!.duration
+    }
 }
 
