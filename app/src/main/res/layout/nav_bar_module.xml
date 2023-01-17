@@ -34,7 +34,7 @@
             <Button
                 android:id="@+id/button_records_view"
                 android:onClick="onClick"
-                android:text="Record list"
+                android:text="Records list"
                 android:textColor="@color/black"
                 android:background="@color/purple_200" />
             <!-- Settings view -->
