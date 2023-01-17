@@ -16,17 +16,19 @@ class MainActivity : AppCompatActivity()
     lateinit var bridgeToRecorderService: ServiceBridge
     lateinit var swipelistener :SwipeListener
     val player=Player()
+    val records_dir = externalCacheDir?.path
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         ensurePermissions(this, applicationContext)
-		initiate()
+        bridgeToRecorderService = ServiceBridge(applicationContext)
+        initiate()
     }
 
-    override fun onDestroy() {
+    override fun onDestroy()
+    {
         super.onDestroy()
-        
     }
 
     private fun initiate()

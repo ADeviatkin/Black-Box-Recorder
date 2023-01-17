@@ -36,7 +36,7 @@ class OnClickManager (del : MainActivity)
             R.id.button_start_recording -> startRecording()
             R.id.button_stop_recording -> stopRecording()
             R.id.button_pause -> pause()
-            R.id.item -> play(sender as Button) //?
+            R.id.item -> play(sender as Button)
             else -> Log.d("App", "Error occurred in OnClickManager -> Unknown button was clicked (View index out of range, View index = "+sender.id.toString()+")")
         }
     }
@@ -44,7 +44,7 @@ class OnClickManager (del : MainActivity)
     // private
     private fun play(sender :Button)
     {
-        var path = "/data/data/com.ad.alphablackbox/files/"+sender.text
+        var path = activity.records_dir.toString()+sender.text
         activity.player.play(File(path), activity.applicationContext)
     }
     private fun<T> getView(id :Int) :T? where T:View
@@ -60,13 +60,16 @@ class OnClickManager (del : MainActivity)
         return null
     }
 
-    private fun pause() {
+    private fun pause()
+    {
         val view = getView<Button>(R.id.button_pause)
-        if(activity.player.isPlaying()){
+        if(activity.player.isPlaying())
+        {
             view?.setText("Resume")
             activity.player.pause()
         }
-        else{
+        else
+        {
             view?.setText("Pause")
             activity.player.unpause()
         }
@@ -77,7 +80,6 @@ class OnClickManager (del : MainActivity)
         // Function begins recording (starts the background service)
 
         Log.d("App", "Try to connect")
-        activity.bridgeToRecorderService = ServiceBridge(activity.applicationContext)
         activity.bridgeToRecorderService.connect()
 
         getView<ImageButton>(R.id.button_start_recording)?.isEnabled = false
@@ -86,6 +88,7 @@ class OnClickManager (del : MainActivity)
     private fun stopRecording()
     {
         // Function stops recording (stops the background service)
+        activity.bridgeToRecorderService.disconnect()
 
         getView<ImageButton>(R.id.button_start_recording)?.isEnabled = true
         getView<Button>(R.id.button_stop_recording)?.isEnabled = false

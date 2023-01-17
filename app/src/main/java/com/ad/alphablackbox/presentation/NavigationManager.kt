@@ -23,13 +23,31 @@ class NavigationManager(del : MainActivity)
     private fun showFileList()
     {
         val loader = FilesLoader()
-        val filelist = loader.getFileNames("/data/data/com.ad.alphablackbox/files/Download")
+        val filelist = loader.getFileNames(activity.records_dir.toString())
         //file list view
         var flv :ListView = activity.findViewById(R.id.filelist)
 
         // Adapter parms
         val adapter = ArrayAdapter<String>(activity, R.layout.list_view_module, R.id.item , filelist)
         flv.adapter = adapter
+    }
+    private fun setSeekBar()
+    {
+        seek = activity.findViewById<SeekBar>(R.id.seekBar)
+        seek?.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean){
+                activity.player.setPosition((progress*activity.player.getDuration()/100).toInt())
+            }
+
+            override fun onStartTrackingTouch(seek: SeekBar){
+                // write custom code for progress is started
+            }
+
+            override fun onStopTrackingTouch(seek: SeekBar){
+                // write custom code for progress is stopped
+            }
+        })
     }
     // public
     fun setView(c :Int)
@@ -42,24 +60,7 @@ class NavigationManager(del : MainActivity)
 
         if (viewIds[c] == R.id.records_layout)
         {
-            if(seek == null){
-                seek = activity.findViewById<SeekBar>(R.id.seekBar)
-                seek?.setOnSeekBarChangeListener(object :
-                    SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean){
-                        activity.player.setPosition((progress*activity.player.getDuration()/100).toInt())
-                    }
-
-                    override fun onStartTrackingTouch(seek: SeekBar){
-                        // write custom code for progress is started
-                    }
-
-                    override fun onStopTrackingTouch(seek: SeekBar){
-                        // write custom code for progress is stopped
-                    }
-                })
-            }
-
+            if(seek == null) setSeekBar()
             showFileList()
         }
         currentView = c
