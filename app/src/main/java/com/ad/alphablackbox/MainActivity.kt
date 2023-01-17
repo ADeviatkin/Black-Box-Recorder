@@ -13,13 +13,15 @@ import com.ad.alphablackbox.logic.load.FilesLoader
 import android.os.Environment
 import android.util.Log
 
+import android.widget.SeekBar
+
 class MainActivity : AppCompatActivity()
 {
     private lateinit var onclickmeneger : OnClickManager
     lateinit var swipelistener :SwipeListener
+    val player=Player()
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ensurePermissions(this, applicationContext)
         initiate()
@@ -31,8 +33,8 @@ class MainActivity : AppCompatActivity()
         swipelistener = SwipeListener(findViewById(R.id.main_layout), onclickmeneger.navigation())
         onclickmeneger.setView(0)
 
-        val p=Player()
         Log.d("App", "Media player created")
+
 
         val path = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
         if(path == null){
@@ -42,14 +44,8 @@ class MainActivity : AppCompatActivity()
             Log.d("App", "Path $path")
             val fl = FilesLoader()
             val files = fl.getAllFiles(path)
-            //p.play(files[1],applicationContext)
-            //p.setPosition(20000)
-            //Log.d("App - player", p.getCurrentPosition().toString())
-            //p.setSpeed(2.0f)
-            //Thread.sleep(10000)
-            //p.pause()
-            //Thread.sleep(20000)
-            //p.unpause()
+            Log.d("App", "song 1")
+            player.play(files[1],applicationContext)
             }
     }
     fun onClick(button :View)
