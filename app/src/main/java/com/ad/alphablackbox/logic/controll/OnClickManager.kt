@@ -8,6 +8,7 @@ import com.ad.alphablackbox.MainActivity
 import com.ad.alphablackbox.R
 import com.ad.alphablackbox.logic.ServiceBridge
 import com.ad.alphablackbox.presentation.NavigationManager
+import java.io.File
 
 class OnClickManager (del : MainActivity)
 {
@@ -34,11 +35,17 @@ class OnClickManager (del : MainActivity)
             // buttons main view
             R.id.button_start_recording -> startRecording()
             R.id.button_stop_recording -> stopRecording()
+            R.id.item -> play(sender as Button)
             else -> Log.d("App", "Error occurred in OnClickManager -> Unknown button was clicked (View index out of range, View index = "+sender.id.toString()+")")
         }
     }
 
     // private
+    private fun play(sender :Button)
+    {
+        var path = "/data/data/com.ad.alphablackbox/files/"+sender.text
+        activity.player.play(File(path), activity.applicationContext)
+    }
     private fun<T> getView(id :Int) :T? where T:View
     {
         try

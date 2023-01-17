@@ -15,8 +15,9 @@ import android.util.Log
 
 class MainActivity : AppCompatActivity()
 {
-    private lateinit var onclickmeneger : OnClickManager
+    private lateinit var onclickmanager : OnClickManager
     lateinit var swipelistener :SwipeListener
+    var player = Player()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -27,33 +28,17 @@ class MainActivity : AppCompatActivity()
 
     private fun initiate()
     {
-        onclickmeneger = OnClickManager(this)
-        swipelistener = SwipeListener(findViewById(R.id.main_layout), onclickmeneger.navigation())
-        onclickmeneger.setView(0)
+        onclickmanager = OnClickManager(this)
+        swipelistener = SwipeListener(findViewById(R.id.main_layout), onclickmanager.navigation())
+        onclickmanager.setView(0)
 
-        val p=Player()
-        Log.d("App", "Media player created")
-
-        val path = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-        if(path == null){
-            Log.d("App", "Can not access to Environment.DIRECTORY_DOWNLOADS")
-        }
-        else{
-            Log.d("App", "Path $path")
-            val fl = FilesLoader()
-            val files = fl.getAllFiles(path)
-            //p.play(files[1],applicationContext)
-            //p.setPosition(20000)
-            //Log.d("App - player", p.getCurrentPosition().toString())
-            //p.setSpeed(2.0f)
-            //Thread.sleep(10000)
-            //p.pause()
-            //Thread.sleep(20000)
-            //p.unpause()
-            }
+        Log.d("App", externalCacheDir?.path.toString())
+        var loader = FilesLoader()
+        var list1 = loader.getAllFiles(externalCacheDir?.path.toString())
+        Log.d("App", list1.toString())
     }
     fun onClick(button :View)
     {
-        onclickmeneger.click(button)
+        onclickmanager.click(button)
     }
 }
