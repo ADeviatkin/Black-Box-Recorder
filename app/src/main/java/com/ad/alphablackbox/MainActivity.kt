@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity()
         ensurePermissions(this, applicationContext)
         initiate()
     }
+
     private fun initiate()
     {
         onclickmeneger = OnClickManager(this)
@@ -40,15 +41,16 @@ class MainActivity : AppCompatActivity()
         else{
             Log.d("App", "Path $path")
             val fl = FilesLoader()
-            val files = fl.getAllFiles(path.toString())
-            var i=0
-            for (file in files) {
-                Log.d("App","$i : $file")
-                i++
+            val files = fl.getAllFiles(path)
+            //p.play(files[1],applicationContext)
+            //p.setPosition(20000)
+            //Log.d("App - player", p.getCurrentPosition().toString())
+            //p.setSpeed(2.0f)
+            //Thread.sleep(10000)
+            //p.pause()
+            //Thread.sleep(20000)
+            //p.unpause()
             }
-            p.play(files[1],applicationContext)
-            Log.d("App", "Song playing started")
-        }
     }
     fun onClick(button :View)
     {
