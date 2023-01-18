@@ -1,6 +1,7 @@
 package com.ad.alphablackbox.presentation
 
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -23,7 +24,7 @@ class NavigationManager(del : MainActivity)
     // private
     private fun showFileList(){
         //file list view
-        var flv :ListView = activity.findViewById(R.id.filelist)
+        val flv :ListView = activity.findViewById(R.id.filelist)
 
         // Adapter parms
         val adapter = ArrayAdapter<String>(activity, R.layout.list_view_module, R.id.item , FileExplorer.getFileNames(recordsDir.toString()))
@@ -35,7 +36,12 @@ class NavigationManager(del : MainActivity)
         seek?.setOnSeekBarChangeListener(object :
                 SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean){
-                activity.player.setPosition((progress*activity.player.getDuration()/100).toInt())
+                if(fromUser)
+                {
+                    activity.player.setPosition((progress*activity.player.getDuration()/100))
+                    activity.player.unpause()
+                    Log.d("App", "set progress")
+                }
             }
 
             override fun onStartTrackingTouch(seek: SeekBar){
@@ -46,6 +52,7 @@ class NavigationManager(del : MainActivity)
                 // write custom code for progress is stopped
             }
         })
+        activity.player.seekBar=seek
     }
     // public
     fun setView(c :Int)
