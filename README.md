@@ -8,16 +8,15 @@ The main idea behind the app is to create something, that can provide you by evi
 
 ## To Do
 
-- [ ] Encrypting
+- [x] Encrypting
   - [x] AES
-  - [ ] RSA
-- [ ] Recording
+- [x] Recording
   - [x] General
-  - [ ] Background service
+  - [x] Background service
 - [ ] GUI
   - [x] Navigation bar
-  - [ ] Recording view
-  - [ ] File explorer/player view
+  - [x] Recording view
+  - [x] File explorer/player view
   - [ ] Settings view
   - [ ] Additional features
 
