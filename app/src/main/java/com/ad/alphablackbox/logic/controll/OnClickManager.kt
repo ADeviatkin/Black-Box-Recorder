@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import com.ad.alphablackbox.MainActivity
+import com.ad.alphablackbox.MainActivity.Companion.recordsDir
 import com.ad.alphablackbox.R
 import com.ad.alphablackbox.logic.ServiceBridge
 import com.ad.alphablackbox.presentation.NavigationManager
@@ -44,8 +45,8 @@ class OnClickManager (del : MainActivity)
     // private
     private fun play(sender :Button)
     {
-        var path = activity.records_dir.toString()+sender.text
-        activity.player.play(File(path), activity.applicationContext)
+        var path = recordsDir + "/" + sender.text
+        activity.player.play(path, activity.applicationContext)
     }
     private fun<T> getView(id :Int) :T? where T:View
     {

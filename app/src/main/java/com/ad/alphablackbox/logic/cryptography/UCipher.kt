@@ -1,39 +1,43 @@
 package com.ad.alphablackbox.logic.cryptography;
+import android.os.Build
 import android.util.Log
-import com.ad.alphablackbox.logic.cryptography.KeyGenerator.Companion.generateAESKeys
-import com.ad.alphablackbox.logic.cryptography.KeyGenerator.Companion.generateIv
-import java.security.Key
+import androidx.annotation.RequiresApi
+import com.ad.alphablackbox.logic.cryptography.LocalKeyGenerator.Companion.getKey
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
+import org.json.JSONObject
 import javax.crypto.Cipher
-import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.GCMParameterSpec
+
 
 class UCipher {
-    private lateinit var key: Key
-    private lateinit var iVector: IvParameterSpec
-    private lateinit var cipherEncryptor: Cipher
-    private lateinit var cipherDecryptor: Cipher
 
-    constructor(transformation: String, BITS_PER_SAMPLE: Short) {
-        try {
-            this.key = generateAESKeys()!!
-            this.iVector = generateIv(BITS_PER_SAMPLE)
-            this.cipherEncryptor = Cipher.getInstance(transformation)
-            this.cipherDecryptor = Cipher.getInstance(transformation)
-            this.cipherEncryptor.init(Cipher.ENCRYPT_MODE, key, iVector)
-            this.cipherDecryptor.init(Cipher.DECRYPT_MODE, key, iVector)
-        } catch (e: java.lang.Exception) {
-            Log.d("Exception", "${this.javaClass.simpleName} ${object {}.javaClass.enclosingMethod.name} ${e.toString()}")
+    @RequiresApi(Build.VERSION_CODES.M)
+    constructor() {
+        LocalKeyGenerator.generateAESKeys()
+
+        //val de_data = decrypt(test, iv)
+        //val invoiceAdditionalAttribute = UCipher.DataPackage(test, iv)
+
+    }
+    companion object {
+        // Encrypt the data
+        fun encrypt(data: ArrayList<Byte>): Pair<ArrayList<Byte>, ByteArray> {
+            Log.d("TAG", data.toString())
+            val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+            cipher.init(Cipher.ENCRYPT_MODE, getKey())
+            var encryptedData = cipher.doFinal(data.toByteArray()).toCollection(ArrayList())
+            return Pair(encryptedData, cipher.iv)
         }
-    }
 
-    // Encrypt the data
-    fun encrypt(data: ArrayList<Byte>): ArrayList<Byte> {
-        val encryptedData = cipherEncryptor.doFinal(data.toByteArray())
-        return encryptedData.toCollection(ArrayList())
-    }
-
-    // Decrypt the data
-    fun decrypt(data: ArrayList<Byte>): ArrayList<Byte> {
-        val decryptedData = cipherDecryptor.doFinal(data.toByteArray())
-        return decryptedData.toCollection(ArrayList())
+        // Encrypt the data
+        fun decrypt(data: ArrayList<Byte>, Iv: ByteArray): ArrayList<Byte> {
+            val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+            val spec = GCMParameterSpec(128, Iv)
+            cipher.init(Cipher.DECRYPT_MODE, getKey(), spec)
+            val decryptedData = cipher.doFinal(data.toByteArray())
+            Log.d("TAG", decryptedData.toCollection(ArrayList()).toString())
+            return decryptedData.toCollection(ArrayList())
+        }
     }
 }

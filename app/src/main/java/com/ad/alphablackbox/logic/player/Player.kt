@@ -5,20 +5,30 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.util.Log
+import com.ad.alphablackbox.MainActivity.Companion.recordsDir
+import com.ad.alphablackbox.logic.FileExplorer
+import com.ad.alphablackbox.logic.cryptography.UCipher.Companion.decrypt
 import java.io.File
 
 class Player : Thread(){
 
     private var mp :MediaPlayer? = null
 
-
     override fun run() {
-        Log.d("App", "Thread is running...")
-        mp!!.start()
+        //mp!!.start()
         sleep(mp!!.duration.toLong())
     }
 
-    fun play(file :File,context:Context) {
+    fun play(file :String,context:Context) {
+        // read data
+        var (data, iv) = FileExplorer.readData(file)
+        // decode data
+        var decodedData = decrypt(data, iv)
+        // create temporary file
+        var file = File(recordsDir, "test.wav")
+        file.createNewFile();
+        file.writeBytes(decodedData.toByteArray())
+        // play
         val path = Uri.parse(file.path)
         if (mp != null) {
             mp!!.release()
@@ -27,6 +37,7 @@ class Player : Thread(){
         mp!!.setDataSource(context,path)
         mp!!.prepare()
         this.start()
+        // delete temporary file ???
     }
 
     fun pause(){

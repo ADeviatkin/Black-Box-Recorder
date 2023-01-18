@@ -35,7 +35,7 @@ class PCMGenerator {
                     override fun run() {
                         recordingCycle = false
                     }
-                }, timePeriod * 1000 * 60)
+                }, timePeriod * 1000)
 
                 while (RecordingVariables.isRecording and recordingCycle) {
                     try {

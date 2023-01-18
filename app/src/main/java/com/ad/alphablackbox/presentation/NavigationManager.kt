@@ -6,8 +6,9 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.SeekBar
 import com.ad.alphablackbox.MainActivity
+import com.ad.alphablackbox.MainActivity.Companion.recordsDir
 import com.ad.alphablackbox.R
-import com.ad.alphablackbox.logic.load.FilesLoader
+import com.ad.alphablackbox.logic.FileExplorer
 
 class NavigationManager(del : MainActivity)
 {
@@ -20,15 +21,12 @@ class NavigationManager(del : MainActivity)
     private val navBarIds :IntArray = intArrayOf(R.id.navigation_bar_indicator_1, R.id.navigation_bar_indicator_2, R.id.navigation_bar_indicator_3)
 
     // private
-    private fun showFileList()
-    {
-        val loader = FilesLoader()
-        val filelist = loader.getFileNames(activity.records_dir.toString())
+    private fun showFileList(){
         //file list view
         var flv :ListView = activity.findViewById(R.id.filelist)
 
         // Adapter parms
-        val adapter = ArrayAdapter<String>(activity, R.layout.list_view_module, R.id.item , filelist)
+        val adapter = ArrayAdapter<String>(activity, R.layout.list_view_module, R.id.item , FileExplorer.getFileNames(recordsDir.toString()))
         flv.adapter = adapter
     }
     private fun setSeekBar()

@@ -47,12 +47,8 @@ class Service : Service() {
         val notification = createNotification()
         startForeground(notificationId, notification)
 
-        //val test = Recorder(this, this.externalCacheDir?.path!!)
-        //Log.d("Service", "start")
-        //test.startRecording()
-        //Thread.sleep(1000*60*10)
-        //test.stopRecording()
-        //Log.d("Service", "end")
+        val test = Recorder(this, this.externalCacheDir?.path!!)
+        test.startRecording()
 
         return super.onStartCommand(intent, flags, startId)
     }

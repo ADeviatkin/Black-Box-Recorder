@@ -14,7 +14,7 @@ class RecordingVariables {
         var inDeque = 0
         var PCMStack = ArrayDeque<ArrayList<Byte>>()
         var WAVStack = ArrayDeque<ArrayList<Byte>>()
-        var encryptedWAVStack = ArrayDeque<ArrayList<Byte>>()
+        var encryptedWAVStack = ArrayDeque<Pair<ArrayList<Byte>, ByteArray>>()
         var recordingsStack = ArrayDeque<String>()
     }
 }

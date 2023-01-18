@@ -4,12 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioRecord
 import android.media.MediaRecorder
-import com.ad.alphablackbox.logic.cryptography.KeyGenerator.Companion.generateAESKeys
-import com.ad.alphablackbox.logic.cryptography.KeyGenerator.Companion.generateIv
+import android.util.Log
 import com.ad.alphablackbox.logic.cryptography.UCipher
 import com.ad.alphablackbox.logic.FileExplorer.Companion.writeData
+import com.ad.alphablackbox.logic.cryptography.UCipher.Companion.encrypt
 import com.ad.alphablackbox.logic.recorder.HeaderConstructor.Companion.addHeaderToPCM
-import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.BITS_PER_SAMPLE
 import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.PCMStack
 import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.WAVStack
 import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.encryptedWAVStack
@@ -18,7 +17,6 @@ import kotlin.concurrent.thread
 
 class Recorder {
 
-    var cipherAES: UCipher? = null
     private var recorder: AudioRecord? = null
     private val path: String
     private var recordingThread: Thread? = null
@@ -34,8 +32,6 @@ class Recorder {
 
     @SuppressLint("MissingPermission")
     fun startRecording() {
-        // create Cipher with AES encrypting
-        this.cipherAES = UCipher("AES", BITS_PER_SAMPLE)
 
         recorder = AudioRecord(
                 MediaRecorder.AudioSource.MIC,
@@ -48,13 +44,14 @@ class Recorder {
 
         //records the audio
         recordingThread = thread(true) {
-            PCMGenerator.recordPCM(recorder!!, 1)
+            PCMGenerator.recordPCM(recorder!!, 10)
         }
 
         //converts audio into wav format by adding special header
         convertingThread = thread(true) {
             while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0 || !PCMStack.isEmpty()) {
                 if (!PCMStack.isEmpty()) {
+                    Log.d("TAAAAG", "Done convertingThread")
                     WAVStack.addLast(addHeaderToPCM(PCMStack.removeFirst()))
                 }
             }
@@ -64,7 +61,8 @@ class Recorder {
         encryptingThread = thread(true) {
             while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0|| !WAVStack.isEmpty()) {
                 if (!WAVStack.isEmpty()) {
-                    encryptedWAVStack.addLast(this.cipherAES!!.encrypt(WAVStack.removeLast()))
+                    Log.d("TAAAAG", "Done encryptingThread")
+                    encryptedWAVStack.addLast(encrypt(WAVStack.removeLast()))
                 }
             }
         }
@@ -73,6 +71,7 @@ class Recorder {
         writingThread = thread(true) {
             while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0 || !encryptedWAVStack.isEmpty()) {
                 if (!encryptedWAVStack.isEmpty()) {
+                    Log.d("TAAAAG", "Done writingThread")
                     writeData(encryptedWAVStack.removeFirst(), this.path!!)
                     RecordingVariables.inDeque -= 1
                 }
