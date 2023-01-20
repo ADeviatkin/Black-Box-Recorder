@@ -7,25 +7,25 @@ import android.os.Build
 import android.util.Log
 import android.widget.SeekBar
 import com.ad.alphablackbox.MainActivity.Companion.recordsDir
-import com.ad.alphablackbox.R
 import com.ad.alphablackbox.logic.FileExplorer
 import com.ad.alphablackbox.logic.cryptography.UCipher.Companion.decrypt
 import java.io.File
 
-class Player : Thread(){
 
-    private var mp :MediaPlayer? = null
+class Player : Runnable{
+
+    private var mediaPlayer :MediaPlayer? = null
     private var threadWorking=false
     private var threadIsWorking=false
     var seekBar :SeekBar? = null
-
+    var thread :Thread? = null
 
     override fun run() {
         threadIsWorking=true
-        mp!!.start()
+        mediaPlayer!!.start()
         while(threadWorking){
-            sleep(1000)
-            seekBar?.progress=((mp!!.currentPosition.toFloat()/mp!!.duration)*100).toInt()
+            Thread.sleep(1000)
+            seekBar?.progress=((mediaPlayer!!.currentPosition.toFloat()/mediaPlayer!!.duration)*100).toInt()
         }
         threadIsWorking=false
     }
@@ -42,40 +42,41 @@ class Player : Thread(){
         // play
         val path = Uri.parse(temporaryFile.path)
         resetPlayer()
-        mp=MediaPlayer()
+        mediaPlayer=MediaPlayer()
         //setDataSource should be secured!
-        mp!!.setDataSource(context,path)
-        mp!!.prepare()
+        mediaPlayer!!.setDataSource(context,path)
+        mediaPlayer!!.prepare()
         threadWorking=true
-        this.start()
+        thread = Thread(this)
+        thread!!.start()
         // delete temporary file ???
     }
 
     fun resetPlayer(){
         threadWorking=false
         while(threadIsWorking){
-            sleep(500)
+            Thread.sleep(500)
         }
-        mp?.reset()
+        mediaPlayer?.reset()
     }
 
     fun pause(){
-        mp?.pause()
+        mediaPlayer?.pause()
     }
 
     fun unpause(){
-        mp?.start()
+        mediaPlayer?.start()
     }
 
     fun isPlaying():Boolean{
-        var b = mp?.isPlaying
+        var b = mediaPlayer?.isPlaying
         if(b==null) {b=false}
         return b
     }
 
     fun setSpeed(speed:Float){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mp!!.playbackParams = mp!!.playbackParams.setSpeed(speed)
+            mediaPlayer!!.playbackParams = mediaPlayer!!.playbackParams.setSpeed(speed)
         }
         else{
             Log.d("App", "Invalid Build.VERSION: Build.VERSION.SDK_INT < Build.VERSION_CODES.M")
@@ -83,12 +84,12 @@ class Player : Thread(){
     }
 
     fun setPosition(time:Int){
-        mp?.seekTo(time)
+        mediaPlayer?.seekTo(time)
     }
 
     fun getCurrentPosition():Int{
-        if(mp!=null){
-            return mp!!.getCurrentPosition()
+        if(mediaPlayer!=null){
+            return mediaPlayer!!.getCurrentPosition()
         }
         else{
             return -1
@@ -96,7 +97,7 @@ class Player : Thread(){
     }
 
     fun getDuration():Int{
-        return mp!!.duration
+        return mediaPlayer!!.duration
     }
 }
 
