@@ -16,5 +16,8 @@ class RecordingVariables {
         var WAVStack = ArrayDeque<ArrayList<Byte>>()
         var encryptedWAVStack = ArrayDeque<Pair<ArrayList<Byte>, ByteArray>>()
         var recordingsStack = ArrayDeque<String>()
+
+        var timePeriod : Long = 30
+        val defaultTimePeriod :Long = 60
     }
 }

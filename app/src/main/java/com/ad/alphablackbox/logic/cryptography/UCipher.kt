@@ -23,7 +23,7 @@ class UCipher {
     companion object {
         // Encrypt the data
         fun encrypt(data: ArrayList<Byte>): Pair<ArrayList<Byte>, ByteArray> {
-            Log.d("TAG", data.toString())
+            //Log.d("TAG - data", data.toString())
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
             cipher.init(Cipher.ENCRYPT_MODE, getKey())
             var encryptedData = cipher.doFinal(data.toByteArray()).toCollection(ArrayList())

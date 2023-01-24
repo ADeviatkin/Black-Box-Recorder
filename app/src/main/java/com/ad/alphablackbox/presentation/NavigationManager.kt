@@ -1,15 +1,21 @@
 package com.ad.alphablackbox.presentation
 
 import android.graphics.Color
+import android.os.Build
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.ListView
 import android.widget.SeekBar
+import androidx.annotation.RequiresApi
 import com.ad.alphablackbox.MainActivity
 import com.ad.alphablackbox.MainActivity.Companion.recordsDir
 import com.ad.alphablackbox.R
 import com.ad.alphablackbox.logic.FileExplorer
+import com.ad.alphablackbox.logic.recorder.RecordingVariables
 
 class NavigationManager(del : MainActivity)
 {
@@ -27,7 +33,9 @@ class NavigationManager(del : MainActivity)
         val flv :ListView = activity.findViewById(R.id.filelist)
 
         // Adapter parms
-        val adapter = ArrayAdapter<String>(activity, R.layout.list_view_module, R.id.item , FileExplorer.getFileNames(recordsDir.toString()))
+        var file_list :MutableList<String> = FileExplorer.getFileNames(recordsDir.toString()).toMutableList()
+        file_list.remove("cache")
+        val adapter = ArrayAdapter<String>(activity, R.layout.list_view_module, R.id.item , file_list)
         flv.adapter = adapter
     }
     private fun setSeekBar()
@@ -54,6 +62,31 @@ class NavigationManager(del : MainActivity)
         })
         activity.player.seekBar=seek
     }
+    private fun setTextListener()
+    {
+        if (!activity.initializedObject())
+        {
+            activity.timeTextBox = activity.findViewById<EditText>(R.id.editTextTime)
+            activity.timeTextBox.addTextChangedListener(object : TextWatcher {
+
+                override fun afterTextChanged(s : Editable?) {}
+
+                override fun beforeTextChanged(s :CharSequence?, start :Int, count :Int, after :Int) {}
+
+                override fun onTextChanged(s :CharSequence?, start :Int, before :Int, count :Int)
+                {
+                    try
+                    {
+                        RecordingVariables.timePeriod = s.toString().toLong()
+                    }
+                    catch (ex :java.lang.Exception)
+                    {
+                        RecordingVariables.timePeriod = RecordingVariables.defaultTimePeriod
+                    }
+                }
+            })
+        }
+    }
     // public
     fun setView(c :Int)
     {
@@ -67,6 +100,10 @@ class NavigationManager(del : MainActivity)
         {
             if(seek == null) setSeekBar()
             showFileList()
+        }
+        else if (viewIds[c] == R.id.settings_layout)
+        {
+            setTextListener()
         }
         currentView = c
     }

@@ -2,17 +2,19 @@ package com.ad.alphablackbox
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.ad.alphablackbox.logic.Permissions.Companion.ensurePermissions
 import com.ad.alphablackbox.logic.ServiceBridge
 import android.view.View
+import android.widget.EditText
 import androidx.annotation.RequiresApi
 import com.ad.alphablackbox.logic.controll.OnClickManager
 import com.ad.alphablackbox.logic.controll.SwipeListener
 import com.ad.alphablackbox.logic.cryptography.UCipher
 import com.ad.alphablackbox.logic.player.Player
-import com.ad.alphablackbox.logic.recorder.RecordingVariables
 import java.nio.file.Path
 
 
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity()
     lateinit var swipelistener :SwipeListener
     var cipherAES: UCipher? = null
     val player = Player()
+    lateinit var timeTextBox :EditText
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?)
@@ -62,5 +65,9 @@ class MainActivity : AppCompatActivity()
     fun onClick(button :View)
     {
         onclickmanager.click(button)
+    }
+    fun initializedObject() : Boolean
+    {
+        return this::timeTextBox.isInitialized
     }
 }

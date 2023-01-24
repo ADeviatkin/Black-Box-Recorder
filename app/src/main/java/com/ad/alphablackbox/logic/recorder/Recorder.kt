@@ -12,8 +12,8 @@ import com.ad.alphablackbox.logic.recorder.HeaderConstructor.Companion.addHeader
 import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.PCMStack
 import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.WAVStack
 import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.encryptedWAVStack
+import com.ad.alphablackbox.logic.recorder.RecordingVariables.Companion.timePeriod
 import kotlin.concurrent.thread
-
 
 class Recorder {
 
@@ -43,25 +43,27 @@ class Recorder {
         RecordingVariables.isRecording = true
 
         //records the audio
-        recordingThread = thread(true) {
-            PCMGenerator.recordPCM(recorder!!, 10)
+        recordingThread = thread(true)
+        {
+            Log.d("App", timePeriod.toString())
+            PCMGenerator.recordPCM(recorder!!, timePeriod)
         }
 
         //converts audio into wav format by adding special header
-        convertingThread = thread(true) {
+        convertingThread = thread(true)
+        {
             while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0 || !PCMStack.isEmpty()) {
                 if (!PCMStack.isEmpty()) {
-                    Log.d("TAAAAG", "Done convertingThread")
                     WAVStack.addLast(addHeaderToPCM(PCMStack.removeFirst()))
                 }
             }
         }
 
         //encrypt audio
-        encryptingThread = thread(true) {
+        encryptingThread = thread(true)
+        {
             while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0|| !WAVStack.isEmpty()) {
                 if (!WAVStack.isEmpty()) {
-                    Log.d("TAAAAG", "Done encryptingThread")
                     encryptedWAVStack.addLast(encrypt(WAVStack.removeLast()))
                 }
             }
@@ -70,8 +72,8 @@ class Recorder {
         //writes encrypted audio to file
         writingThread = thread(true) {
             while (RecordingVariables.isRecording || RecordingVariables.inDeque != 0 || !encryptedWAVStack.isEmpty()) {
-                if (!encryptedWAVStack.isEmpty()) {
-                    Log.d("TAAAAG", "Done writingThread")
+                if (!encryptedWAVStack.isEmpty())
+                {
                     writeData(encryptedWAVStack.removeFirst(), this.path!!)
                     RecordingVariables.inDeque -= 1
                 }
