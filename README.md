@@ -13,12 +13,12 @@ The main idea behind the app is to create something, that can provide you by evi
 - [x] Recording
   - [x] General
   - [x] Background service
-- [ ] GUI
+- [x] GUI
   - [x] Navigation bar
   - [x] Recording view
   - [x] File explorer/player view
-  - [ ] Settings view
-  - [ ] Additional features
+  - [x] Settings view
+  - [x] Additional features
 
 ## Authors
 
