@@ -1,8 +1,10 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         google()
         mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+        maven { url 'https://jitpack.io' }
+        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {
@@ -10,7 +12,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+        maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "Alpha Black Box"
+rootProject.name = "Black Box Recorder"
 include ':app'
