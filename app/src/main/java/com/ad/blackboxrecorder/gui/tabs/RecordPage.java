@@ -3,7 +3,6 @@ package com.ad.blackboxrecorder.gui.tabs;
 import android.annotation.SuppressLint;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ad.blackboxrecorder.R;
-import com.ad.blackboxrecorder.gui.ButtonManager2;
+import com.ad.blackboxrecorder.gui.ButtonManager;
 import com.gauravk.audiovisualizer.visualizer.CircleLineVisualizer;
 
 public class RecordPage extends Fragment {
@@ -36,8 +35,8 @@ public class RecordPage extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         CircleLineVisualizer mVisualizer = view.findViewById(R.id.blast);
         bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL, FORMAT);
-
-        ButtonManager2.handleButtons(view);
+        new ButtonManager(view);
+        ButtonManager.handleRecordingButton();
 
         //audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE, CHANNEL, FORMAT, bufferSize);
         //audioRecord.startRecording();
