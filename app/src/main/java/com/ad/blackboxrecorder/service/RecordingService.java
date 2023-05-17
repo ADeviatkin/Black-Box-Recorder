@@ -14,7 +14,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.ad.blackboxrecorder.R;
-import com.ad.blackboxrecorder.gui.ButtonManager;
+//import com.ad.blackboxrecorder.gui.ButtonManager;
 
 
 public class RecordingService extends Service {
@@ -55,7 +55,7 @@ public class RecordingService extends Service {
         super.onDestroy();
         Log.d("Service", "Destroyed");
         status = disabled;
-        ButtonManager.updateRecordButton();
+        //ButtonManager.updateRecordButton();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class RecordingService extends Service {
         //test.startRecording();
 
         status = recording;
-        ButtonManager.updateRecordButton();
+        //ButtonManager.updateRecordButton();
         return super.onStartCommand(intent, flags, startId);
     }
 
