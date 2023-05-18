@@ -51,7 +51,7 @@ public class ServiceBridge {
         Log.d("App", "Unbind then disconnect with Service");
         recorderIntent = new Intent(activity, RecordingService.class);
         activity.stopService(recorderIntent);
-        //activity.unbindService(connection);
+        activity.unbindService(connection);
         if (!isServiceRunning(RecordingService.class)){
             isServiceRunning = false;
         }

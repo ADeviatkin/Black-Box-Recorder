@@ -14,6 +14,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.ad.blackboxrecorder.R;
+import com.ad.blackboxrecorder.recording.RecordingHandler;
 //import com.ad.blackboxrecorder.gui.ButtonManager;
 
 
@@ -46,7 +47,6 @@ public class RecordingService extends Service {
     public void onCreate() {
         super.onCreate();
         status = loading;
-
         Log.d("Service", "Created");
     }
 
@@ -64,8 +64,8 @@ public class RecordingService extends Service {
         Notification notification = createNotification();
         startForeground(notificationId, notification);
 
-        //Recorder test = new Recorder(this, this.getExternalCacheDir().getPath());
-        //test.startRecording();
+        RecordingHandler RecordingHandler = new RecordingHandler(this);
+        RecordingHandler.start();
 
         status = recording;
         //ButtonManager.updateRecordButton();

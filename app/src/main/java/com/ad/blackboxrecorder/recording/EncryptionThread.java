@@ -46,7 +46,7 @@ public class EncryptionThread extends Thread {
     }
 
     private void openNewFile() throws FileNotFoundException {
-        File outputFile = new File(outputDir, "encrypted_output_" + fileCounter + ".txt");
+        File outputFile = new File(outputDir, "encrypted_output_" + fileCounter + ".encraud");
         currentOutputStream = new FileOutputStream(outputFile);
         fileCounter++;
         currentFileSize = 0;

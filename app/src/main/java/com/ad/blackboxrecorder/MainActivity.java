@@ -10,6 +10,7 @@ import android.util.Log;
 import com.ad.blackboxrecorder.gui.MainAdapter;
 import com.ad.blackboxrecorder.gui.tabs.ListenPage;
 import com.ad.blackboxrecorder.gui.tabs.RecordPage;
+import com.ad.blackboxrecorder.recording.RecordingHandler;
 import com.ad.blackboxrecorder.service.RecordingService;
 import com.ad.blackboxrecorder.service.ServiceBridge;
 import com.google.android.material.tabs.TabLayout;
@@ -25,9 +26,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ServiceBridge = new ServiceBridge(this);
-
-        //RecordingHandler RecordingHandler = new RecordingHandler(this);
-        //RecordingHandler.start();
         //PlayingHandler PlayingHandler = new PlayingHandler(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
