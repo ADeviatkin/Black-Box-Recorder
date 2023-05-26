@@ -35,7 +35,7 @@ public class FileAdapter extends ArrayAdapter<String> {
         ImageButton playButton = convertView.findViewById(R.id.playButton);
 
         String fileName = files.get(position);
-        textView.setText(fileName);
+        textView.setText(fileName.substring(0,fileName.lastIndexOf(".")));
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
