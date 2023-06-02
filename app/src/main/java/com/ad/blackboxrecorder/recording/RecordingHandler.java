@@ -12,30 +12,26 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class RecordingHandler {
-
-    private final RecordingService mainActivity;
-
-    public RecordingHandler(RecordingService mainActivity){
-        this.mainActivity = mainActivity;
+    public RecordingHandler(){
     }
 
     public void start(){
         BlockingQueue<byte[]> queue = new LinkedBlockingQueue<>();
-        File outputDir = mainActivity.getExternalFilesDir(null);
+
         RecordingThread recordingThread = new RecordingThread(queue);
-        EncryptionThread encryptionThread = new EncryptionThread(queue, outputDir);
+        EncryptionThread encryptionThread = new EncryptionThread(queue);
         recordingThread.start();
         encryptionThread.start();
 
     }
     public void stop(){
-        int sampleRateInHz = 44100;  // Adjust this according to your audio format
-        int bufferSizeInBytes = AudioTrack.getMinBufferSize(sampleRateInHz, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes, AudioTrack.MODE_STREAM);
-        audioTrack.play();
+        //int sampleRateInHz = 44100;  // Adjust this according to your audio format
+        //int bufferSizeInBytes = AudioTrack.getMinBufferSize(sampleRateInHz, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        //AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes, AudioTrack.MODE_STREAM);
+        //audioTrack.play();
 
-        File inputFile = new File(mainActivity.getExternalFilesDir(null), "test.txt");  // Replace with the actual file name
-        DecryptionThread decryptionThread = new DecryptionThread(inputFile, audioTrack);
-        decryptionThread.start();
+        //File inputFile = new File(outputDir, "test.txt");  // Replace with the actual file name
+        //DecryptionThread decryptionThread = new DecryptionThread(inputFile, audioTrack);
+        //decryptionThread.start();
     }
 }

@@ -2,6 +2,6 @@
 <resources>
     <!-- frame_1 strings -->
 
-    <string name="app_name">Page 1</string>
-    <string name="ek_img_content">ExportKit Image</string>
+    <string name="app_name">Black Box Recorder</string>
+    <string name="ek_img_content">BBR</string>
 </resources>

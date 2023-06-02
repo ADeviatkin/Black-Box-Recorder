@@ -1,10 +1,13 @@
 package com.ad.blackboxrecorder.gui.tabs;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +15,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.ad.blackboxrecorder.MainActivity;
 import com.ad.blackboxrecorder.R;
 import com.ad.blackboxrecorder.gui.FileAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -43,6 +47,16 @@ public class ListenPage extends Fragment {
         adapter = new FileAdapter(requireActivity(), files);
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Position is the position of the item in the ListView that was clicked
+                // id is the row id of the item that was clicked
+                String item = (String) parent.getItemAtPosition(position);
+                Log.d("TEST", "WORKS");
+            }
+        });
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -52,30 +66,24 @@ public class ListenPage extends Fragment {
         });
 
 
-        View bottomSheet = view.findViewById(R.id.bottom_sheet);
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomSheet.getLayoutParams();
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        //View bottomSheet = view.findViewById(R.id.bottom_sheet);
+        //CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomSheet.getLayoutParams();
+        //bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
 
-        // To expand the bottom sheet
-        //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-        // To collapse the bottom sheet
-        //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-        // To hide the bottom sheet
-        //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         updateListView();
     }
 
-    private void updateListView() {
+    public void updateListView() {
         File directory = requireActivity().getExternalFilesDir(null);
+        /*
         if (bottomSheetBehavior.getState()!=BottomSheetBehavior.STATE_EXPANDED){
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
         else{
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         }
+         */
 
         // Check if the directory is not null and is a directory
         if (directory != null && directory.isDirectory()) {
@@ -87,11 +95,14 @@ public class ListenPage extends Fragment {
                 // Clear the ArrayList and add the names of the files
                 files.clear();
                 for (File file : fileList) {
-                    files.add(file.getName());
+                    if (file.getName().split("\\.")[1].equals("encraud"))
+                        files.add(file.getName());
                 }
                 // Notify the ArrayAdapter that the data has changed
                 adapter.notifyDataSetChanged();
             }
         }
     }
+
+
 }

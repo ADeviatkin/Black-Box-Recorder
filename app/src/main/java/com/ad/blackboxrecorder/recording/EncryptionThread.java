@@ -7,33 +7,31 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 public class EncryptionThread extends Thread {
-    private static final long TEN_MINUTES_DATA_SIZE = 52920000;  // Adjust this according to your audio format
-    private BlockingQueue<byte[]> queue;
-    private File outputDir;
-    private long currentFileSize = 0;
-    private int fileCounter = 0;
-    private FileOutputStream currentOutputStream;
 
-    public EncryptionThread(BlockingQueue<byte[]> queue, File outputDir) {
+    private BlockingQueue<byte[]> queue;
+
+    public EncryptionThread(BlockingQueue<byte[]> queue) {
         this.queue = queue;
-        this.outputDir = outputDir;
     }
 
     public void run() {
+        Record newOneRecord = null;
         try {
-            openNewFile();
+            newOneRecord = new Record();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        try {
             while (true) {
                 try {
                     byte[] buffer = queue.take();
-                    if (currentFileSize + buffer.length > TEN_MINUTES_DATA_SIZE) {
-                        closeCurrentFile();
-                        openNewFile();
+                    if (newOneRecord.getFileSize() + buffer.length > newOneRecord.getDataSize()) {
+                        newOneRecord = new Record();
                     }
                     for (int i = 0; i < buffer.length; i++) {
                         buffer[i] = (byte) (buffer[i] + 1);  // Simple Caesar cipher for encryption
                     }
-                    currentOutputStream.write(buffer);
-                    currentFileSize += buffer.length;
+                    newOneRecord.writeToFile(buffer);
                 } catch (InterruptedException e) {
                     break;
                 }
@@ -41,24 +39,7 @@ public class EncryptionThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            closeCurrentFile();
-        }
-    }
-
-    private void openNewFile() throws FileNotFoundException {
-        File outputFile = new File(outputDir, "encrypted_output_" + fileCounter + ".encraud");
-        currentOutputStream = new FileOutputStream(outputFile);
-        fileCounter++;
-        currentFileSize = 0;
-    }
-
-    private void closeCurrentFile() {
-        if (currentOutputStream != null) {
-            try {
-                currentOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            newOneRecord = null;
         }
     }
 }

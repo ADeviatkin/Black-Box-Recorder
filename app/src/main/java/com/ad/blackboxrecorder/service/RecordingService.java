@@ -49,12 +49,13 @@ public class RecordingService extends Service {
         status = loading;
         Log.d("Service", "Created");
     }
-
+    RecordingHandler RecordingHandler;
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d("Service", "Destroyed");
         status = disabled;
+        RecordingHandler.stop();
         //ButtonManager.updateRecordButton();
     }
 
@@ -64,7 +65,7 @@ public class RecordingService extends Service {
         Notification notification = createNotification();
         startForeground(notificationId, notification);
 
-        RecordingHandler RecordingHandler = new RecordingHandler(this);
+        RecordingHandler = new RecordingHandler();
         RecordingHandler.start();
 
         status = recording;
