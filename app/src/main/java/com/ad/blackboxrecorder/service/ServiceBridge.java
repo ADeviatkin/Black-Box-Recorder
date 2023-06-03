@@ -14,8 +14,6 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ad.blackboxrecorder.service.RecordingService;
-
 public class ServiceBridge {
     public static boolean isServiceRunning = false;
     private Context activity;

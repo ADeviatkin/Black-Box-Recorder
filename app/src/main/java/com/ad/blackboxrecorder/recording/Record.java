@@ -1,5 +1,7 @@
 package com.ad.blackboxrecorder.recording;
 
+import android.util.Log;
+
 import com.ad.blackboxrecorder.MainActivity;
 
 import java.io.File;
@@ -25,8 +27,13 @@ public class Record {
         return CurrentFileStream;
     }
     public LocalDateTime extractDataTimeFromTitle(String title){
-        String buf = title.split("\\.")[0].split(" ")[1];
-        return LocalDateTime.parse(buf, DateTimeFormatter.ofPattern("dd-MM-yyyy_HH:mm:ss"));
+        try {
+            String buf = title.split("\\.")[0].split(" ")[1];
+            return LocalDateTime.parse(buf, DateTimeFormatter.ofPattern("dd-MM-yyyy_HH:mm:ss"));
+        } catch (Exception e) {
+            Log.d("Exception", String.valueOf(e));
+            return null;
+        }
     }
     public Record(String fileName){
         title = fileName;

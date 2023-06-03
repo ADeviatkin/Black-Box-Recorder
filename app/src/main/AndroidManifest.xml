@@ -3,12 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Speech recognition permission -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.KEYSTORE_GET_KEY" />
-    <uses-permission android:name="android.permission.USE_BIOMETRIC permission" />
 
     <application
         android:allowBackup="true"

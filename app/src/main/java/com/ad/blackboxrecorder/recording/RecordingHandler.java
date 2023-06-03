@@ -27,13 +27,5 @@ public class RecordingHandler {
     }
     public void stop(){
         isThreadOn = false;
-        //int sampleRateInHz = 44100;  // Adjust this according to your audio format
-        //int bufferSizeInBytes = AudioTrack.getMinBufferSize(sampleRateInHz, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        //AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes, AudioTrack.MODE_STREAM);
-        //audioTrack.play();
-
-        //File inputFile = new File(outputDir, "test.txt");  // Replace with the actual file name
-        //DecryptionThread decryptionThread = new DecryptionThread(inputFile, audioTrack);
-        //decryptionThread.start();
     }
 }
