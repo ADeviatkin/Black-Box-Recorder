@@ -12,19 +12,21 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class RecordingHandler {
+    public static boolean isThreadOn;
     public RecordingHandler(){
     }
-
+    RecordingThread recordingThread;
+    EncryptionThread encryptionThread;
     public void start(){
         BlockingQueue<byte[]> queue = new LinkedBlockingQueue<>();
-
-        RecordingThread recordingThread = new RecordingThread(queue);
-        EncryptionThread encryptionThread = new EncryptionThread(queue);
+        recordingThread = new RecordingThread(queue);
+        encryptionThread = new EncryptionThread(queue);
+        isThreadOn = true;
         recordingThread.start();
         encryptionThread.start();
-
     }
     public void stop(){
+        isThreadOn = false;
         //int sampleRateInHz = 44100;  // Adjust this according to your audio format
         //int bufferSizeInBytes = AudioTrack.getMinBufferSize(sampleRateInHz, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
         //AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes, AudioTrack.MODE_STREAM);

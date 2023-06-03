@@ -22,7 +22,7 @@ public class EncryptionThread extends Thread {
             throw new RuntimeException(e);
         }
         try {
-            while (true) {
+            while (RecordingHandler.isThreadOn) {
                 try {
                     byte[] buffer = queue.take();
                     if (newOneRecord.getFileSize() + buffer.length > newOneRecord.getDataSize()) {

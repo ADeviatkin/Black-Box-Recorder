@@ -11,6 +11,7 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.Image;
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -56,23 +57,24 @@ public class FileAdapter extends ArrayAdapter<String> {
         this.files = files;
     }
 
+    private Handler mHandler = new Handler();
+    private boolean userIsSeeking = false;  // Add this
+
+    private Runnable mUpdateSeekBar = new Runnable() {
+        @Override
+        public void run() {
+            if (currentAudioTrack != null && !userIsSeeking) {  // Check userIsSeeking here
+                currentSeekBar.setProgress(currentSeekBar.getProgress()+44100);
+            }
+            mHandler.postDelayed(this, 1000);  // Update every second
+        }
+    };
+
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
-        }
-        if(currentSeekBar != null) {
-            currentSeekBar.setVisibility(View.GONE);
-            currentSeekBar = null;
-        }
-        if(currentAudioTrack != null) {
-            currentAudioTrack.stop();
-            currentAudioTrack = null;
-        }
-        if(currentV != null){
-            currentV.setPressed(false);
-            currentV = null;
         }
         TextView textView = convertView.findViewById(R.id.textView);
         TextView textView2 = convertView.findViewById(R.id.textView2);
@@ -84,9 +86,12 @@ public class FileAdapter extends ArrayAdapter<String> {
 
         // Initially hide the SeekBar
         seekBar.setVisibility(View.GONE);
+
+
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                seekBar.setProgress(0);
                 if (!v.isSelected()){
                     if(currentSeekBar != null) {
                         currentSeekBar.setVisibility(View.GONE);
@@ -95,19 +100,19 @@ public class FileAdapter extends ArrayAdapter<String> {
                     if(currentAudioTrack != null) {
                         currentAudioTrack.stop();
                         currentAudioTrack = null;
+                        mHandler.removeCallbacks(mUpdateSeekBar);
+                    }
+                    if(currentV != null) {
+                        currentV.setSelected(false);
                     }
                     currentV = (ImageButton) v;
                     v.setSelected(true);
                     seekBar.setVisibility(View.VISIBLE);
                     byte[] pcmData = Decryptor.decrypt(record.getFile());
-                    int audioTrackDuration = 60;
-
                     int sampleRate = 44100;
                     int channelConfig = AudioFormat.CHANNEL_OUT_MONO;
                     int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
-
                     int minBufferSize = AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat);
-
                     AudioTrack audioTrack = new AudioTrack(
                             AudioManager.STREAM_MUSIC,
                             sampleRate,
@@ -115,32 +120,32 @@ public class FileAdapter extends ArrayAdapter<String> {
                             audioFormat,
                             Math.max(minBufferSize, pcmData.length),
                             AudioTrack.MODE_STATIC);
-
                     audioTrack.write(pcmData, 0, pcmData.length);
                     currentSeekBar = seekBar;
                     currentAudioTrack =audioTrack;
-                    seekBar.setMax(audioTrackDuration);
-
+                    seekBar.setMax(audioTrack.getBufferSizeInFrames());
+                    audioTrack.play();
+                    mHandler.post(mUpdateSeekBar);  // Start updating
                     seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            if (audioTrack != null && fromUser) {
-                                int seekPos = progress * audioTrack.getSampleRate() * audioTrack.getChannelCount();
-                                audioTrack.setPlaybackHeadPosition(seekPos);
+                            if (currentAudioTrack != null && fromUser) {
+                                currentSeekBar.setProgress(progress);
+                                currentAudioTrack.setPlaybackHeadPosition(progress);
                             }
                         }
-
                         @Override
                         public void onStartTrackingTouch(SeekBar seekBar) {
-                            if (audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
-                                audioTrack.pause();
+                            userIsSeeking = true;
+                            if (currentAudioTrack != null && currentAudioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+                                currentAudioTrack.pause();
                             }
                         }
-
                         @Override
                         public void onStopTrackingTouch(SeekBar seekBar) {
-                            if (audioTrack != null) {
-                                audioTrack.play();
+                            userIsSeeking = false;
+                            if (currentAudioTrack != null) {
+                                currentAudioTrack.play();
                             }
                         }
                     });
@@ -213,7 +218,7 @@ public class FileAdapter extends ArrayAdapter<String> {
                                     shareIntent.putExtra(Intent.EXTRA_TEXT, "");
 
                                     context.startActivity(Intent.createChooser(shareIntent, "Share file via"));
-                                    mp3_file.delete();
+                                    //mp3_file.delete();
                                     return true;
                                 case R.id.action_option3:
                                     record.removeRecording();
@@ -253,21 +258,40 @@ public class FileAdapter extends ArrayAdapter<String> {
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
                                 case R.id.action_option1:
+                                    byte[] pcm = Decryptor.decrypt(record.getFile());
+
+                                    File pcm_file = null;
+                                    try {
+                                        pcm_file = new File(directory + "/temp");
+                                        FileOutputStream fos = new FileOutputStream(pcm_file);
+                                        fos.write(pcm);
+                                        fos.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    PCMDecoder.encodeToMp3(
+                                            pcm_file.getPath(),     // Input PCM file
+                                            1,                                            // Number of channels
+                                            96000,                                        // Bit rate
+                                            22000,                                        // Sample rate
+                                            directory + "/temp.mp3" // Output MP3 file
+                                    );
+                                    File mp3_file = new File(directory + "/temp.mp3");
+
+                                    pcm_file.delete();
+                                    Uri fileUri = FileProvider.getUriForFile(context, "com.ad.blackboxrecorder", mp3_file);
+
                                     Intent shareIntent = new Intent();
                                     shareIntent.setAction(Intent.ACTION_SEND);
-                                    // Assuming 'file' is a File object of the file you want to share
-                                    Uri fileUri = FileProvider.getUriForFile(context, "com.ad.blackboxrecorder", record.getFile());
                                     shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-                                    // Mime type of the file. For example, if it's a JPEG image, use "image/jpeg".
-                                    // If you don't specifically know the mime type, you can use "*/*"
-                                    shareIntent.setType("image/jpeg");
-                                    // This is needed for apps targeting Android 10 (API level 29) and higher,
-                                    // it grants temporary access permissions to the URI for the receiving app.
+                                    shareIntent.setType("audio/mpeg");  // The MIME type for MP3 files is "audio/mpeg"
                                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                    // You can optionally add a subject and text to the Intent for apps that support it like email clients.
                                     shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject of your email or share text");
-                                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Body of your email or share text");
+                                    shareIntent.putExtra(Intent.EXTRA_TEXT, "");
+
                                     context.startActivity(Intent.createChooser(shareIntent, "Share file via"));
+                                    //mp3_file.delete();
                                     return true;
                                 case R.id.action_option2:
                                     record.removeRecording();

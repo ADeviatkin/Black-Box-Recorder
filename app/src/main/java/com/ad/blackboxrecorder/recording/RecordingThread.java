@@ -29,7 +29,7 @@ public class RecordingThread extends Thread {
 
     public void run() {
         audioRecord.startRecording();
-        while (true) {
+        while (RecordingHandler.isThreadOn) {
             audioRecord.read(buffer, 0, bufferSize);
             try {
                 queue.put(buffer);

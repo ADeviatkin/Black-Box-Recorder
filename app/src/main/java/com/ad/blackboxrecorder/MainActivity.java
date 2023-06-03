@@ -21,8 +21,6 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     public static File directory;
-    TabLayout tabLayout;
-    ViewPager viewPager;
     public static ServiceBridge ServiceBridge;
 
     @Override
@@ -30,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ServiceBridge = new ServiceBridge(this);
-        //PlayingHandler PlayingHandler = new PlayingHandler(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,4 +47,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         ServiceBridge.isServiceRunning(RecordingService.class);
     }
+
+
 }

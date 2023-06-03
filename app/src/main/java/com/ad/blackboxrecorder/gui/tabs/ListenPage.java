@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,8 +25,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class ListenPage extends Fragment {
-
-    private ArrayAdapter<String> adapter;
+    private TextView listenMessage;
+    private ListView recordingsListView;
+    private ArrayAdapter<String> recordingElementAdapter;
     private ArrayList<String> files;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -34,29 +36,17 @@ public class ListenPage extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_listen, container, false);
     }
-    public BottomSheetBehavior bottomSheetBehavior;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ListView listView = view.findViewById(R.id.listView);
+        recordingsListView = view.findViewById(R.id.listView);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        listenMessage = view.findViewById(R.id.listen_message);
 
         files = new ArrayList<>();
-        //adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_list_item_1, files);
-        adapter = new FileAdapter(requireActivity(), files);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Position is the position of the item in the ListView that was clicked
-                // id is the row id of the item that was clicked
-                String item = (String) parent.getItemAtPosition(position);
-                Log.d("TEST", "WORKS");
-            }
-        });
-
+        recordingElementAdapter = new FileAdapter(requireActivity(), files);
+        recordingsListView.setAdapter(recordingElementAdapter);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -64,42 +54,26 @@ public class ListenPage extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
-
-        //View bottomSheet = view.findViewById(R.id.bottom_sheet);
-        //CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomSheet.getLayoutParams();
-        //bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-
         updateListView();
     }
 
     public void updateListView() {
-        File directory = requireActivity().getExternalFilesDir(null);
-        /*
-        if (bottomSheetBehavior.getState()!=BottomSheetBehavior.STATE_EXPANDED){
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        }
-        else{
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-         */
-
-        // Check if the directory is not null and is a directory
-        if (directory != null && directory.isDirectory()) {
-            // Get the list of files in the directory
-            File[] fileList = directory.listFiles();
-
-            // Check if the file list is not null
+        File ExternalDirectory = requireActivity().getExternalFilesDir(null);
+        if (ExternalDirectory != null && ExternalDirectory.isDirectory()) {
+            files.clear();
+            File[] fileList = ExternalDirectory.listFiles();
             if (fileList != null) {
-                // Clear the ArrayList and add the names of the files
-                files.clear();
                 for (File file : fileList) {
                     if (file.getName().split("\\.")[1].equals("encraud"))
                         files.add(file.getName());
                 }
-                // Notify the ArrayAdapter that the data has changed
-                adapter.notifyDataSetChanged();
+                recordingElementAdapter.notifyDataSetChanged();
+            }
+            if(files.isEmpty()){
+                listenMessage.setVisibility(View.VISIBLE);
+            }
+            else{
+                listenMessage.setVisibility(View.INVISIBLE);
             }
         }
     }

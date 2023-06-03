@@ -1,8 +1,5 @@
 package com.ad.blackboxrecorder.service;
 
-import static android.app.PendingIntent.getActivity;
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import static com.ad.blackboxrecorder.gui.ButtonManager.changeRecordButtonStatus;
 
 import android.annotation.SuppressLint;
@@ -30,7 +27,7 @@ public class ServiceBridge {
         if (isServiceRunning(RecordingService.class)){
             isServiceRunning = true;
             changeRecordButtonStatus(true);
-            Log.d("App", "Already");
+
         }
     }
 
@@ -51,7 +48,8 @@ public class ServiceBridge {
         Log.d("App", "Unbind then disconnect with Service");
         recorderIntent = new Intent(activity, RecordingService.class);
         activity.stopService(recorderIntent);
-        activity.unbindService(connection);
+        if (connection != null)
+            activity.unbindService(connection);
         if (!isServiceRunning(RecordingService.class)){
             isServiceRunning = false;
         }
@@ -61,13 +59,11 @@ public class ServiceBridge {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d("Service", "Connected");
-            // Implement your service connection logic here
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             Log.d("Service", "Disconnected");
-            // Implement your service disconnection logic here
         }
     }
     @SuppressLint("Deprecated")

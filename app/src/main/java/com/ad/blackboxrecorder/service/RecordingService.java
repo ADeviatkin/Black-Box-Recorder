@@ -15,14 +15,11 @@ import androidx.core.app.NotificationCompat;
 
 import com.ad.blackboxrecorder.R;
 import com.ad.blackboxrecorder.recording.RecordingHandler;
-//import com.ad.blackboxrecorder.gui.ButtonManager;
 
 
 public class RecordingService extends Service {
     public static final int disabled = 0;
-    public static final int enabled = 1;
     public static final int recording = 2;
-    public static final int error = 3;
     public static final int loading = 4;
     public static int status = 0;
     private final IBinder binder = new LocalBinder();
@@ -56,7 +53,6 @@ public class RecordingService extends Service {
         Log.d("Service", "Destroyed");
         status = disabled;
         RecordingHandler.stop();
-        //ButtonManager.updateRecordButton();
     }
 
     @Override
@@ -64,12 +60,9 @@ public class RecordingService extends Service {
         createNotificationChannel();
         Notification notification = createNotification();
         startForeground(notificationId, notification);
-
         RecordingHandler = new RecordingHandler();
         RecordingHandler.start();
-
         status = recording;
-        //ButtonManager.updateRecordButton();
         return super.onStartCommand(intent, flags, startId);
     }
 
