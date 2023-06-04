@@ -15,7 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 
-public class    MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     public static File directory;
     public static ServiceBridge ServiceBridge;
     @Override

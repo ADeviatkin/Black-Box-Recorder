@@ -4,22 +4,16 @@ import static com.ad.blackboxrecorder.MainActivity.directory;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,14 +23,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
-import com.ad.blackboxrecorder.MainActivity;
 import com.ad.blackboxrecorder.R;
-import com.ad.blackboxrecorder.gui.tabs.ListenPage;
 import com.ad.blackboxrecorder.playing.Decryptor;
 import com.ad.blackboxrecorder.recording.Record;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -166,7 +157,14 @@ public class FileAdapter extends ArrayAdapter<String> {
         });
         ImageView buttonMore = convertView.findViewById(R.id.buttonMore);
         if (!record.isPermanent){
-            textView2.setText("min. before removal: " +record.getStatus());
+            long min =record.getStatus();
+            if (min>60){
+                textView2.setText("h. to removal: " + min/60);
+            }
+            else{
+                textView2.setText("min. to removal: " + min);
+            }
+
             View finalConvertView = convertView;
             buttonMore.setOnClickListener(new View.OnClickListener() {
                 @Override

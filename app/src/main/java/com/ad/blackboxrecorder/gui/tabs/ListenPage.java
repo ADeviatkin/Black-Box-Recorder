@@ -19,6 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.ad.blackboxrecorder.MainActivity;
 import com.ad.blackboxrecorder.R;
 import com.ad.blackboxrecorder.gui.FileAdapter;
+import com.ad.blackboxrecorder.recording.Record;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.File;
@@ -69,14 +70,12 @@ public class ListenPage extends Fragment {
                 }
                 recordingElementAdapter.notifyDataSetChanged();
             }
-            if(files.isEmpty()){
+            if (files.isEmpty()) {
                 listenMessage.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 listenMessage.setVisibility(View.INVISIBLE);
             }
         }
     }
-
 
 }
