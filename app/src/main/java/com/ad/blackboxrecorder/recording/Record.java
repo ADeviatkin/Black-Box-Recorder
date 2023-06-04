@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Record {
-    private static final long DATA_SIZE = 317520000;  // ten minute 52920000
+    private static final long DATA_SIZE = 105840000;  // ten minute 52920000
     FileOutputStream CurrentFileStream;
     private long currentFileSize = 0;
     private LocalDateTime creationDate;
