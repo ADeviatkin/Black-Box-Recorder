@@ -1,6 +1,6 @@
 package com.ad.blackboxrecorder.service;
 
-import static com.ad.blackboxrecorder.gui.ButtonManager.changeRecordButtonStatus;
+import static com.ad.blackboxrecorder.activities.Main.gui.ButtonManager.changeRecordButtonStatus;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;

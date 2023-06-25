@@ -14,7 +14,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.ad.blackboxrecorder.R;
-import com.ad.blackboxrecorder.recording.RecordingHandler;
+import com.ad.blackboxrecorder.activities.Main.model.recording.RecordingHandler;
 
 
 public class RecordingService extends Service {
@@ -24,9 +24,9 @@ public class RecordingService extends Service {
     public static int status = 0;
     private final IBinder binder = new LocalBinder();
     private final int notificationId = 1;
-    private final String notificationChannelId = "my_channel_id";
-    private final String notificationChannelName = "My Channel";
-    private final String notificationContentTitle = "Background Recorder";
+    private final String notificationChannelId = "BBRecorder_Channel_Id";
+    private final String notificationChannelName = "BBRecorder_Channel";
+    private final String notificationContentTitle = "BBRecorder - Background";
     private final String notificationContentText = "App is running in background and record sound 24/7";
 
     public class LocalBinder extends Binder {
@@ -43,8 +43,8 @@ public class RecordingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        status = loading;
         Log.d("Service", "Created");
+        status = loading;
     }
     RecordingHandler RecordingHandler;
     @Override
